@@ -17,4 +17,8 @@ app.get('/funcionario', (req: Request, res: Response) => {
   return res.status(200).json(employeeFound);
 });
 
+app.post('/log', (req: Request, res: Response) => {
+  console.log(req.body);
+});
+
 app.listen(process.env.PORT || 3333, () => { console.log('App running on http://localhost:3333'); });
