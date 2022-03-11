@@ -1,8 +1,20 @@
-import soma from '@utils/soma';
-import express from 'express';
+import 'dotenv/config';
+import express, { Request, Response } from 'express';
+import db from './db.json';
 
 const app = express();
 
-app.get('/', (req, res) => res.json({ message: 'Hello World', soma: soma(10, 12) }));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.listen(3333, () => { console.log('App running on http://localhost:3333'); });
+app.get('/funcionario', (req: Request, res: Response) => {
+  const { cpf } = req.query;
+
+  const employeeFound = db.find((employee) => employee.cpf === cpf);
+
+  if (!employeeFound) return res.status(404).json({ message: 'Funcionário não encontrado' });
+
+  return res.status(200).json(employeeFound);
+});
+
+app.listen(process.env.PORT || 3333, () => { console.log('App running on http://localhost:3333'); });
